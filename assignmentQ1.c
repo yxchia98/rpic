@@ -7,23 +7,21 @@ int binAdd(int operand1, int operand2);
 int calCarry(int operand1, int operand2);
 int binAdd(int operand1, int operand2);
 int binSub(int operand1, int operand2);
-int binDiv(int operand1, int operand2, int *ptr);
-int binDivLoop(int operand1, int operand2, int *ptr);
+int binDiv(int operand1, int operand2);
+int binDivLoop(int operand1, int operand2);
 
 int isPositive(int n);
 
 int main()
 {
     int operand1, operand2, result, remainder;
-    int *ptr;
 
     printf("Enter Dividend:");                      //get dividend
     scanf("%d", &operand1);                         
     printf("Enter Divisor:");                       //get divisor
-    scanf("%d", &operand2);
-    ptr = &remainder;                               //pointer 
-    result = binDiv(operand1, operand2, ptr);       //pass values into binDiv()
-    printf("Binary division for %d(dividend) and %d(divisor) is: %d, remainder:%d\n", operand1, operand2, result, remainder);   
+    scanf("%d", &operand2);                              //pointer 
+    result = binDiv(operand1, operand2);       //pass values into binDiv()
+    printf("Binary division for %d(dividend) and %d(divisor) is: %d\n", operand1, operand2, result);   
     return 0;
 }
 
@@ -53,7 +51,7 @@ int binSub(int operand1, int operand2)                          //Perform binary
     return result;
 }
 
-int binDiv(int operand1, int operand2, int *ptr)
+int binDiv(int operand1, int operand2)
 {
     int operand1Type, operand2Type, result;
     operand1Type = isPositive(operand1);                        //check for positive or negative value, if positive return 1, if negative return 0
@@ -61,31 +59,29 @@ int binDiv(int operand1, int operand2, int *ptr)
 
     if(operand1Type == 1 && operand2Type == 1)                  //both operands positive, dont need conversion
     {
-        result = binDivLoop(operand1, operand2, ptr);
+        result = binDivLoop(operand1, operand2);
     }
     else if(operand1Type == 1 && operand2Type == 0)             //divisor negative, convert to positive before division
     {
         operand2 = binAdd(~operand2, 1);                        //convert divisor to positive equivalent 
-        result = binAdd(~binDivLoop(operand1, operand2, ptr), 1);
-        *ptr = binAdd(~*ptr, 1);
+        result = binAdd(~binDivLoop(operand1, operand2), 1);
     }
     else if(operand1Type == 0 && operand2Type == 1)             //dividend negative, convert to positive equivalent before division
     {
         operand1 = binAdd(~operand1, 1);                        //convert dividend to positive equivalent      
-        result = binAdd(~binDivLoop(operand1, operand2, ptr), 1);
-        *ptr = binAdd(~*ptr, 1);
+        result = binAdd(~binDivLoop(operand1, operand2), 1);
     }
     else                                                        //both operands negative, convert both to positive before division.
     {
         operand1 = binAdd(~operand1, 1);                        //convert both dividend and divisor to positive equivalentb before division
         operand2 = binAdd(~operand2, 1);
-        result = binDivLoop(operand1, operand2, ptr);
+        result = binDivLoop(operand1, operand2);
     }
     
     return result;
 }
 
-int binDivLoop(int operand1, int operand2, int *ptr)
+int binDivLoop(int operand1, int operand2)
 {
     int i, remainder, divisor, quotient;
     i = 0;
@@ -109,7 +105,6 @@ int binDivLoop(int operand1, int operand2, int *ptr)
         divisor = divisor >> 1;                         //end of every iteration, right shift divisor
         i = binAdd(i, 1);                               //increment counter
     }
-    *ptr = remainder;
     return quotient;
 }
 
