@@ -30,6 +30,8 @@
 #define G 0x07E0
 #define B 0x001F
 #define W 0xFFFF
+#define Y 0xFFE0
+#define BK 0x0000
 
 void delay(int);
 uint16_t colorSet(int choice);
@@ -45,46 +47,98 @@ int main(void)
     printf("1. Red\n");
     printf("2. Green\n");
     printf("3. Blue\n");
-    printf("4. White\n");    
+    printf("4. White\n");
     printf("Select Color:");
     scanf("%d", &choice);
     uint16_t N = colorSet(choice);
-    uint16_t array[64] =    {0,0,0,N,N,0,0,0,
-                             0,0,N,N,N,N,0,0,
-                             0,N,N,0,0,N,N,0,
-                             N,N,0,0,0,0,N,N,
-                             N,N,N,N,N,N,N,N,
-                             N,0,0,0,0,0,0,N,
-                             N,0,0,0,0,0,0,N,
-                             N,0,0,0,0,0,0,N};
 
-    /* open the led frame buffer device */
+    uint16_t letterA[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, N, N, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0};
+    uint16_t letterB[64] = {0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, N, N, N, 0, 0};
+    uint16_t letterC[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0};
+    uint16_t letterD[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterE[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterF[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterG[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, N, N, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterH[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterI[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterJ[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterK[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterL[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterM[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, N, 0, N, 0, N, 0, N, 0, 0, N, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterN[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, 0, 0, N, 0, 0, 0, N, 0, N, 0, N, 0, 0, 0, N, 0, 0, N, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterO[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterP[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterQ[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, N, N, 0, 0, 0, N, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, N};
+    uint16_t letterR[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterS[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterT[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterU[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterV[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterW[64] = {0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, N, 0, 0, N, 0, 0, N, 0, N, 0, N, 0, 0, 0, N, 0, N, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterX[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterY[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t letterZ[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    uint16_t heart[64] = {
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, N, N, 0, 0, N, N, 0,
+        N, N, N, N, N, N, N, N,
+        N, N, N, N, N, N, N, N,
+        0, N, N, N, N, N, N, 0,
+        0, 0, N, N, N, N, 0, 0,
+        0, 0, 0, N, N, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0};
+
+    uint16_t singapore[64] = {
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, N, N, 0, 0, N, N, 0,
+        N, 0, 0, 0, N, 0, 0, N,
+        N, N, 0, 0, N, 0, 0, 0,
+        0, 0, N, 0, N, 0, N, N,
+        N, 0, N, 0, N, 0, 0, N,
+        0, N, 0, 0, 0, N, N, 0,
+        0, 0, 0, 0, 0, 0, 0, 0};
+
+    uint16_t smile[64] = {
+        0,0,Y,Y,Y,Y,0,0,
+        0,Y,Y,Y,Y,Y,Y,0,
+        Y,W,BK,Y,Y,W,BK,Y,
+        Y,BK,W,Y,Y,BK,W,Y,
+        Y,Y,Y,Y,Y,Y,Y,Y,
+        Y,Y,BK,W,W,BK,Y,Y,
+        0,Y,Y,R,R,Y,Y,0,
+        0,0,Y,Y,Y,Y,0,0,};
+
     fbfd = open(FILEPATH, O_RDWR);
-    if (fbfd == -1) {
-	perror("Error (call to 'open')");
-	exit(EXIT_FAILURE);
+    if (fbfd == -1)
+    {
+        perror("Error (call to 'open')");
+        exit(EXIT_FAILURE);
     }
 
     /* read fixed screen info for the open device */
-    if (ioctl(fbfd, FBIOGET_FSCREENINFO, &fix_info) == -1) {
-	perror("Error (call to 'ioctl')");
-	close(fbfd);
-	exit(EXIT_FAILURE);
+    if (ioctl(fbfd, FBIOGET_FSCREENINFO, &fix_info) == -1)
+    {
+        perror("Error (call to 'ioctl')");
+        close(fbfd);
+        exit(EXIT_FAILURE);
     }
 
     /* now check the correct device has been found */
-    if (strcmp(fix_info.id, "RPi-Sense FB") != 0) {
-	printf("%s\n", "Error: RPi-Sense FB not found");
-	close(fbfd);
-	exit(EXIT_FAILURE);
+    if (strcmp(fix_info.id, "RPi-Sense FB") != 0)
+    {
+        printf("%s\n", "Error: RPi-Sense FB not found");
+        close(fbfd);
+        exit(EXIT_FAILURE);
     }
 
     /* map the led frame buffer device into memory */
     map = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
-    if (map == MAP_FAILED) {
-	close(fbfd);
-	perror("Error mmapping the file");
-	exit(EXIT_FAILURE);
+    if (map == MAP_FAILED)
+    {
+        close(fbfd);
+        perror("Error mmapping the file");
+        exit(EXIT_FAILURE);
     }
 
     /* set a pointer to the start of the memory area */
@@ -94,27 +148,44 @@ int main(void)
     memset(map, 0, FILESIZE);
 
     /* light it up! */
-    for (i = 0; i < NUM_WORDS; i++) {
-	*(p + i) = array[i];
-	// delay(0);
+    for (i = 0; i < NUM_WORDS; i++)
+    {
+        *(p + i) = letterI[i];
+        // delay(0);
     }
-    delay(1000);
+    delay(500);
 
-    /* flash white */
-    // for (i = 0; i < 3; i++) {
-	// delay(250);
-	// memset(map, 0xFF, FILESIZE);
-	// delay(250);
-	// memset(map, 0, FILESIZE);
-    // }
-    // delay(250);
+    /* light it up! */
+    for (i = 0; i < NUM_WORDS; i++)
+    {
+        *(p + i) = heart[i];
+        //delay(25);
+    }
+    delay(500);
+
+    /* light it up! */
+    for (i = 0; i < NUM_WORDS; i++)
+    {
+        *(p + i) = singapore[i];
+        //delay(25);
+    }
+    delay(500);
+
+    /* light it up! */
+    for (i = 0; i < NUM_WORDS; i++)
+    {
+        *(p + i) = smile[i];
+        //delay(25);
+    }
+    delay(5000);
 
     /* clear the led matrix */
     memset(map, 0, FILESIZE);
 
     /* un-map and close */
-    if (munmap(map, FILESIZE) == -1) {
-	perror("Error un-mmapping the file");
+    if (munmap(map, FILESIZE) == -1)
+    {
+        perror("Error un-mmapping the file");
     }
     close(fbfd);
 
@@ -129,19 +200,19 @@ void delay(int t)
 uint16_t colorSet(int choice)
 {
     uint16_t n;
-    if(choice == 1)
+    if (choice == 1)
     {
         n = R;
     }
-    else if(choice == 2)
+    else if (choice == 2)
     {
         n = G;
     }
-    else if(choice == 3)
+    else if (choice == 3)
     {
         n = B;
     }
-    else if(choice == 4)
+    else if (choice == 4)
     {
         n = W;
     }
@@ -149,6 +220,6 @@ uint16_t colorSet(int choice)
     {
         n = 0;
     }
-    
+
     return n;
 }
