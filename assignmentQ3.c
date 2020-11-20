@@ -78,7 +78,6 @@ int main(void)
     printf("Press 2 to change to Green\n");
     printf("Press 3 to change to Blue\n");
     printf("Press 4 to change to White\n");
-    printf("Press 9 to change to exit\n");
     // scanf("%d", &choice);
     // Nchoice = colorSet(choice);
 
@@ -126,9 +125,29 @@ int main(void)
         // redeclare everything?
         // uint16_t letterI[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, *N, *N, *N, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, *N, *N, *N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         setColor(N, letter);
-        for (int i = 0; i < 26; i++)
+        int blink;
+        printf("Make it blink? (yes: 1) (no: 2):");
+        scanf("%d", &blink);
+        if (blink == 2)
         {
-            light_it_up(p, letter[i]);
+            for (int i = 0; i < 26; i++)
+            {
+                light_it_up(p, letter[i]);
+                delay(500);
+            }
+        }
+        if (blink == 1)
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                for (int k = 0; k < 2; k++)
+                {
+                    light_it_up(p, letter[i]);
+                    delay(250);
+                    memset(p, 0, FILESIZE);
+                    delay(250);
+                }
+            }
         }
     }
 
@@ -311,6 +330,14 @@ void light_it_up(uint16_t *p, uint16_t exact_letter[64])
         *(p + i) = exact_letter[i];
     }
     delay(500);
+    // for (int i = 0; i < 3; i++)
+    // {
+    //     delay(250);
+    //     memset(p, 0, FILESIZE);
+    //     delay(250);
+    //     memset(p, 0, FILESIZE);
+    // }
+    // delay(250);
 
     // /* light it up! */
     // for (i = 0; i < NUM_WORDS; i++)
