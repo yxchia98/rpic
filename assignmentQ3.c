@@ -115,6 +115,7 @@ int main(void)
 
     /* clear the led matrix */
     memset(map, 0, FILESIZE);
+    //MAIN MENU, TO BE BRANCHED TO SUB MENUS, ETC
     while(choice != 6)
     {
         printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. <empty>\n5. <empty>\n6. Exit\nEnter Selection:");
