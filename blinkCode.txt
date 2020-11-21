@@ -1,0 +1,29 @@
+while (choice != 9)
+    {
+
+        // redeclare everything?
+        int blink;
+        printf("Make it blink? (yes: 1) (no: 2):");
+        scanf("%d", &blink);
+        if (blink == 2)
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                light_it_up(p, letter[i]);
+                delay(500);
+            }
+        }
+        if (blink == 1)
+        {
+            for (int i = 0; i < 26; i++)
+            {
+                for (int k = 0; k < 2; k++)
+                {
+                    light_it_up(p, letter[i]);
+                    delay(250);
+                    memset(p, 0, FILESIZE);
+                    delay(250);
+                }
+            }
+        }
+    }

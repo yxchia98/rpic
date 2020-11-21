@@ -34,10 +34,11 @@
 #define BK 0x0000
 
 void delay(int);
-uint16_t colorSet(int choice);
+void colorSet(int choice, uint16_t *n);
 // uint16_t letterA[64], letterB[64], letterC[64], letterD[64], letterE[64], letterF[64], letterG[64], letterH[64], letterI[64], letterJ[64], letterK[64], letterL[64], letterM[64], letterN[64], letterO[64], letterP[64], letterQ[64], letterR[64], letterS[64], letterT[64], letterU[64], letterV[64], letterW[64], letterX[64], letterY[64], letterZ[64], heart[64], singapore[64], smile[64];
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
 void light_it_up(uint16_t *p, uint16_t exact_letter[64]);
+void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64]);
 int main(void)
 {
     int i, choice;
@@ -73,11 +74,6 @@ int main(void)
                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 
     struct fb_fix_screeninfo fix_info;
-    printf("COLOR SETTER\n");
-    printf("Press 1 to change to Red\n");
-    printf("Press 2 to change to Green\n");
-    printf("Press 3 to change to Blue\n");
-    printf("Press 4 to change to White\n");
     // scanf("%d", &choice);
     // Nchoice = colorSet(choice);
 
@@ -115,39 +111,28 @@ int main(void)
 
     /* set a pointer to the start of the memory area */
     p = map;
+
+
     /* clear the led matrix */
     memset(map, 0, FILESIZE);
-    while (choice != 9)
+    while(choice != 6)
     {
-        printf("Select Option:");
+        printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. <empty>\n5. <empty>\n6. Exit\nEnter Selection:");
         scanf("%d", &choice);
-        N = colorSet(choice);
-        // redeclare everything?
-        // uint16_t letterI[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, *N, *N, *N, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, 0, *N, 0, 0, 0, 0, 0, 0, *N, *N, *N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        setColor(N, letter);
-        int blink;
-        printf("Make it blink? (yes: 1) (no: 2):");
-        scanf("%d", &blink);
-        if (blink == 2)
+        switch (choice)
         {
-            for (int i = 0; i < 26; i++)
-            {
-                light_it_up(p, letter[i]);
-                delay(500);
-            }
-        }
-        if (blink == 1)
-        {
-            for (int i = 0; i < 26; i++)
-            {
-                for (int k = 0; k < 2; k++)
-                {
-                    light_it_up(p, letter[i]);
-                    delay(250);
-                    memset(p, 0, FILESIZE);
-                    delay(250);
-                }
-            }
+            case 1:
+                selectColor(p, &N, letter);
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
         }
     }
 
@@ -169,31 +154,28 @@ void delay(int t)
     usleep(t * 1000);
 }
 
-uint16_t colorSet(int choice)
+void colorSet(int choice, uint16_t *n)
 {
-    uint16_t n;
-    if (choice == 1)
+    if(choice == 1)
     {
-        n = R;
+        *n = R;
     }
-    else if (choice == 2)
+    else if(choice == 2)
     {
-        n = G;
+        *n = G;
     }
-    else if (choice == 3)
+    else if(choice == 3)
     {
-        n = B;
+        *n = B;
     }
-    else if (choice == 4)
+    else if(choice == 4)
     {
-        n = W;
+        *n = W;
     }
     else
     {
-        n = 0;
+        
     }
-
-    return n;
 }
 
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64])
@@ -362,4 +344,22 @@ void light_it_up(uint16_t *p, uint16_t exact_letter[64])
     //     //delay(25);
     // }
     // delay(5000);
+}
+
+void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
+{
+    int i, choice = 0;
+    printf("COLOR SETTER\n1. Red\n2. Green\n3. Blue\n4. White\n5. Exit\n");
+    while(choice != 5)
+    {
+        printf("Select color:");
+        scanf("%d", &choice);
+        colorSet(choice, N);
+        setColor(*N, letter);
+        for (i = 0; i < NUM_WORDS; i++) {
+        *(ptr + i) = letter[0][i];
+        }
+    }
+    printf("Color changed to:0x%04X\n",*N);
+
 }
