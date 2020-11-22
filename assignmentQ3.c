@@ -37,8 +37,9 @@ void delay(int);
 void colorSet(int choice, uint16_t *n);
 // uint16_t letterA[64], letterB[64], letterC[64], letterD[64], letterE[64], letterF[64], letterG[64], letterH[64], letterI[64], letterJ[64], letterK[64], letterL[64], letterM[64], letterN[64], letterO[64], letterP[64], letterQ[64], letterR[64], letterS[64], letterT[64], letterU[64], letterV[64], letterW[64], letterX[64], letterY[64], letterZ[64], heart[64], singapore[64], smile[64];
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
-void light_it_up(uint16_t *p, uint16_t exact_letter[64]);
+void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue);
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64]);
+void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch);
 int main(void)
 {
     int i, choice;
@@ -118,7 +119,7 @@ int main(void)
     //MAIN MENU, TO BE BRANCHED TO SUB MENUS, ETC
     while(choice != 6)
     {
-        printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. <empty>\n5. <empty>\n6. Exit\nEnter Selection:");
+        printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. <empty>\n6. Exit\nEnter Selection:");
         scanf("%d", &choice);
         switch (choice)
         {
@@ -129,7 +130,7 @@ int main(void)
             case 3:
                 break;
             case 4:
-                break;
+                displayText(p, letter, message, ch);
             case 5:
                 break;
             case 6:
@@ -305,12 +306,12 @@ void setColor(uint16_t N, uint16_t (*letter_ptr)[64])
     //     0,
     // };
 }
-void light_it_up(uint16_t *p, uint16_t exact_letter[64])
+void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue)
 {
     /* light it up! */
     for (int i = 0; i < NUM_WORDS; i++)
     {
-        *(p + i) = exact_letter[i];
+        *(ptr + i) = letter[letterValue][i];
     }
     delay(500);
     // for (int i = 0; i < 3; i++)
@@ -363,4 +364,30 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
     }
     printf("Color changed to:0x%04X\n",*N);
 
+}
+
+void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
+{
+    int option = 0;
+    printf("Display Message\n1. Enter message: \n2. Exit\n");
+    while (option != 2)
+    {
+        printf("Enter a message: ");
+        fgets(message, 100, stdin);
+        for (int i = 0; message[i] != '\0'; ++i)
+        {
+            ch = message[i];
+
+            //Change lowercase's value to uppercase
+            if (ch >= 'a' && ch <= 'z')
+            {
+                ch = ch - 32;
+                message[i] = ch;
+            }
+
+            int charValue = message[i] - 65;
+
+            light_it_up(p, letter, charValue);
+        }
+    }
 }
