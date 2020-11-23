@@ -114,28 +114,27 @@ int main(void)
     /* set a pointer to the start of the memory area */
     p = map;
 
-
     /* clear the led matrix */
     memset(map, 0, FILESIZE);
     //MAIN MENU, TO BE BRANCHED TO SUB MENUS, ETC
-    while(choice != 6)
+    while (choice != 6)
     {
         printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. Test Game\n6. Exit\nEnter Selection:");
         scanf("%d", &choice);
         switch (choice)
         {
-            case 1:
-                selectColor(p, &N, letter);
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                displayText(p, letter, message, ch);
-            case 5:
-                squareGame(8, 1, p, N, map);
-            case 6:
-                break;
+        case 1:
+            selectColor(p, &N, letter);
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            displayText(p, letter, message, ch);
+        case 5:
+            squareGame(8, 1, p, N, map);
+        case 6:
+            break;
         }
     }
 
@@ -159,25 +158,24 @@ void delay(int t)
 
 void colorSet(int choice, uint16_t *n)
 {
-    if(choice == 1)
+    if (choice == 1)
     {
         *n = R;
     }
-    else if(choice == 2)
+    else if (choice == 2)
     {
         *n = G;
     }
-    else if(choice == 3)
+    else if (choice == 3)
     {
         *n = B;
     }
-    else if(choice == 4)
+    else if (choice == 4)
     {
         *n = W;
     }
     else
     {
-        
     }
 }
 
@@ -353,18 +351,18 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
 {
     int i, choice = 0;
     printf("COLOR SETTER\n1. Red\n2. Green\n3. Blue\n4. White\n5. Exit\n");
-    while(choice != 5)
+    while (choice != 5)
     {
         printf("Select color:");
         scanf("%d", &choice);
         colorSet(choice, N);
         setColor(*N, letter);
-        for (i = 0; i < NUM_WORDS; i++) {
-        *(ptr + i) = letter[0][i];
+        for (i = 0; i < NUM_WORDS; i++)
+        {
+            *(ptr + i) = letter[0][i];
         }
     }
-    printf("Color changed to:0x%04X\n",*N);
-
+    printf("Color changed to:0x%04X\n", *N);
 }
 
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
@@ -391,7 +389,11 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
                     ch = ch - 32;
                     message[i] = ch;
                 }
-                light_it_up(p, letter, message[i] - 65);
+                // here is the scrolling part
+                for (int j = 8; j > 3; --j)
+                {
+                    light_it_up(p + j, letter, message[i] - 65);
+                }
             }
         }
     }
