@@ -368,26 +368,30 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
 
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
 {
-    int option = 0;
-    printf("Display Message\n1. Enter message: \n2. Exit\n");
+    char option = 0;
+    printf("Display Message\nPress 2. Exit\n");
     while (option != 2)
     {
-        printf("Enter a message: ");
+        printf("Enter alphabetic message: ");
         fgets(message, 100, stdin);
+
         for (int i = 0; message[i] != '\0'; ++i)
         {
             ch = message[i];
-
-            //Change lowercase's value to uppercase
-            if (ch >= 'a' && ch <= 'z')
+            if (ch == 50)
             {
-                ch = ch - 32;
-                message[i] = ch;
+                option = 2;
             }
-
-            int charValue = message[i] - 65;
-
-            light_it_up(p, letter, charValue);
+            else
+            {
+                //Change lowercase's value to uppercase
+                if (ch >= 'a' && ch <= 'z')
+                {
+                    ch = ch - 32;
+                    message[i] = ch;
+                }
+                light_it_up(p, letter, message[i] - 65);
+            }
         }
     }
 }
