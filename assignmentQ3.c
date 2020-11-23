@@ -40,6 +40,7 @@ void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
 void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue);
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64]);
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch);
+int squareGame(int squareLength, int i, uint16_t *ptr, uint16_t N, uint16_t *map);
 int main(void)
 {
     int i, choice;
@@ -119,7 +120,7 @@ int main(void)
     //MAIN MENU, TO BE BRANCHED TO SUB MENUS, ETC
     while(choice != 6)
     {
-        printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. <empty>\n6. Exit\nEnter Selection:");
+        printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. Test Game\n6. Exit\nEnter Selection:");
         scanf("%d", &choice);
         switch (choice)
         {
@@ -132,7 +133,7 @@ int main(void)
             case 4:
                 displayText(p, letter, message, ch);
             case 5:
-                break;
+                squareGame(8, 1, p, N, map);
             case 6:
                 break;
         }
@@ -393,5 +394,87 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
                 light_it_up(p, letter, message[i] - 65);
             }
         }
+    }
+}
+
+int squareGame(int squareLength, int i, uint16_t *ptr, uint16_t N, uint16_t *map)
+{
+    int option = 0;
+    int n = squareLength * squareLength;
+    int result, number = i;
+    char ch;
+
+    printf("Enter 2 to Exit\n");
+
+    while (option != 2)
+    {
+        printf("\nEnter your direction: ");
+        //fgets(message, 100, stdin);
+        scanf(" %c", &ch); //a leading space in your format string to eat up any whitespace
+
+        result = number;
+        if (ch == 87 || ch == 119)
+        { //letter W for UP
+            result -= squareLength;
+            if (result < 1) // move up
+            {
+                number += (n - squareLength);
+            }
+            else
+            {
+                number -= squareLength;
+            }
+        }
+        else if (ch == 83 || ch == 115)
+        { //letter S for DOWN
+            result += squareLength;
+            if (result > n) // move down
+            {
+                number -= (n - squareLength);
+            }
+            else
+            {
+                number += squareLength;
+            }
+        }
+        else if (ch == 65 || ch == 97)
+        { //letter A for LEFT
+            result -= 1;
+            if (result % squareLength == 0)
+            {
+                number += (squareLength - 1); // move left
+            }
+            else
+            {
+                number -= 1;
+            }
+        }
+        else if (ch == 68 || ch == 100)
+        { //letter D for RIGHT
+            result += 1;
+            if (result % squareLength == 1)
+            {
+                number -= (squareLength - 1); //move right
+            }
+            else
+            {
+                number += 1;
+            }
+        }
+        else if (ch == 50)
+        { //press 2 to exit
+            option = 2;
+            break;
+        }
+
+        //printf("\n%d", result);
+        printf("\n%d", number);
+        //return number;
+        /* light it up! */
+
+        *(ptr + (number - 1)) = N;
+        delay(50);
+        //Clear LED matrix
+        memset(map, 0, FILESIZE);
     }
 }
