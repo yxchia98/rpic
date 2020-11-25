@@ -390,11 +390,53 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
                     ch = ch - 32;
                     message[i] = ch;
                 }
-                // here is the scrolling part
-                for (int j = 8; j > 3; --j)
+                int letterValue = message[i] - 65;
+                uint16_t Choosenletter[8][16];
+                int count = 0;
+                uint16_t zero = 0;
+                for (int k = 0; k < 64; k += 8)
                 {
-                    light_it_up(p + j, letter, message[i] - 65);
+                    for (int j = 0; j < 8; j++)
+                    {
+                        Choosenletter[count][j] = letter[letterValue][j + k];
+                    }
+                    for (int j = 8; j < 16; j++)
+                    {
+                        Choosenletter[count][j] = zero;
+                    }
+                    count++;
                 }
+                count = 0;
+                //sliding animation
+                for (int m = 0; m < 8; m++)
+                {
+                    count = 0;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        printf("%d", i);
+                        for (int k = 0; k < 8; k++)
+                        {
+                            int abc = k + m;
+                            *(p + count + k) = Choosenletter[i][abc];
+                            printf("%d", *(p + count + k));
+                        }
+                        count += 8;
+                        printf("\n");
+                    }
+                    delay(1000);
+                    memset(p, 0, FILESIZE);
+                }
+                // for (int i = 0; i < NUM_WORDS; i++)
+                // {
+                //     *p = letter[letterValue][i];
+                // }
+                // delay(250);
+
+                // here is the scrolling part
+                // for (int j = 8; j > 3; --j)
+                // {
+                //     light_it_up(p + j, letter, message[i] - 65);
+                // }
             }
         }
     }
