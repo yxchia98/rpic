@@ -43,6 +43,7 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
 int squareGame(int squareLength, int i, uint16_t *ptr, uint16_t N, uint16_t *map);
 int main(void)
 {
+    char message[100], ch;
     int i, choice;
     int fbfd;
     uint16_t *map;
