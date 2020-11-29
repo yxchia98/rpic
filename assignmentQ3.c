@@ -140,6 +140,7 @@ int main(void)
             break;
         case 5:
             squareGame(8, 1, p, N, map);
+            break;
         case 6:
             break;
         }
