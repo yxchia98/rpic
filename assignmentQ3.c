@@ -6,7 +6,7 @@
  *
  *  Build with:  gcc -Wall -O2 led_matrix.c -o led_matrix
  *
- *  Tested with:  Raspbian GNU/Linux 10 (buster) / Raspberry Pi 3 B+
+ *  Tested with:  Raspbian GNU/Linux 10 (buster) / Raspberry Pi 4 model B
  *
  */
 
@@ -36,9 +36,10 @@
 void delay(int);
 void colorSet(int choice, uint16_t *n);
 // uint16_t letterA[64], letterB[64], letterC[64], letterD[64], letterE[64], letterF[64], letterG[64], letterH[64], letterI[64], letterJ[64], letterK[64], letterL[64], letterM[64], letterN[64], letterO[64], letterP[64], letterQ[64], letterR[64], letterS[64], letterT[64], letterU[64], letterV[64], letterW[64], letterX[64], letterY[64], letterZ[64], heart[64], singapore[64], smile[64];
+void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *map);
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
 void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue);
-void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64]);
+void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map);
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch);
 int squareGame(int squareLength, int i, uint16_t *ptr, uint16_t N, uint16_t *map);
 int main(void)
@@ -49,6 +50,7 @@ int main(void)
     uint16_t *map;
     uint16_t *p;
     uint16_t N = W;
+    uint16_t user_matrix[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     uint16_t letter[26][64] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, N, N, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0},
                                {0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, N, N, N, 0, 0},
                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0},
@@ -125,8 +127,10 @@ int main(void)
         switch (choice)
         {
         case 1:
-            selectColor(p, &N, letter);
+            selectColor(p, &N, letter, map);
+            break;
         case 2:
+            editMatrix(p, &N, user_matrix, map);
             break;
         case 3:
             break;
@@ -155,6 +159,50 @@ int main(void)
 void delay(int t)
 {
     usleep(t * 1000);
+}
+
+void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *map)
+{
+    int i, j, k, row, col, edit, choice;
+    k = 0;
+    choice = 0;
+    printf("Matrix customizer\nEnter 0 at anytime to quit and return to main menu\nPress 1 to Continue...\n");
+    scanf("%d", &choice);
+    while(choice != 0)
+    {
+        printf("USER MATRIX\n");
+        for (i = 0; i < NUM_WORDS; i++)
+        {
+            *(ptr + i) = user_matrix[i];
+        }
+        for(i = 0, k = 0; i < 8; i++)
+        {
+            for(j = 0; j < 8;j++, k++)
+            {
+                user_matrix[k] != 0 ? printf("1 "): printf("0 ");
+            }
+            printf("\n");
+        }
+        printf("Enter row:");
+        scanf("%d", &row);
+        printf("Enter col:");
+        scanf("%d", &col);
+        if(row == 0 || col == 0)
+        {
+            choice = 0;
+        }
+        else if(row <= 0 || col <= 0)
+        {
+            printf("Enter positive values for rows and columns\n");
+        }
+        else
+        {
+            edit = (row - 1) * 8 + col - 1;
+            user_matrix[edit] = user_matrix[edit] == 0 ? *N : 0;
+        }
+
+    }
+    memset(map, 0, FILESIZE);
 }
 
 void colorSet(int choice, uint16_t *n)
@@ -348,9 +396,13 @@ void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue)
     // delay(5000);
 }
 
-void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
+void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map)
 {
     int i, choice = 0;
+    for (i = 0; i < NUM_WORDS; i++)
+    {
+        *(ptr + i) = letter[0][i];
+    }
     printf("COLOR SETTER\n1. Red\n2. Green\n3. Blue\n4. White\n5. Exit\n");
     while (choice != 5)
     {
@@ -364,6 +416,7 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
         }
     }
     printf("Color changed to:0x%04X\n", *N);
+    memset(map, 0, FILESIZE);
 }
 
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
