@@ -41,9 +41,10 @@ void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue);
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64]);
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch);
 int squareGame(int squareLength, int i, uint16_t *ptr, uint16_t N, uint16_t *map);
+char changeUpperCase(char letter);
 int main(void)
 {
-    char message[100], ch;
+    char message[100] = {}, ch;
     int i, choice;
     int fbfd;
     uint16_t *map;
@@ -368,77 +369,78 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[26][64])
 
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
 {
-    char option = 0;
+    int option = 0;
     printf("Display Message\nPress 2. Exit\n");
+    fgetc(stdin);
     while (option != 2)
     {
-        printf("Enter alphabetic message: ");
+        //clear array
+        memset(message, 0, 100);
+        printf("\nEnter alphabetic message: ");
         fgets(message, 100, stdin);
-
-        for (int i = 0; message[i] != '\0'; ++i)
+        printf("first length of message %d\n", strlen(message));
+        if (strlen(message) != 1)
         {
-            ch = message[i];
-            if (ch == 50)
+            if (message[0] == 50)
             {
                 option = 2;
             }
             else
             {
-                //Change lowercase's value to uppercase
-                if (ch >= 'a' && ch <= 'z')
-                {
-                    ch = ch - 32;
-                    message[i] = ch;
-                }
-                int letterValue = message[i] - 65;
-                uint16_t Choosenletter[8][16];
+                int lengthOfMessage = strlen(message) - 1;
+                int arr_length = lengthOfMessage * 10;
+                uint16_t Choosenletter[8][1000] = {};
                 int count = 0;
                 uint16_t zero = 0;
-                for (int k = 0; k < 64; k += 8)
-                {
-                    for (int j = 0; j < 8; j++)
-                    {
-                        Choosenletter[count][j] = letter[letterValue][j + k];
-                    }
-                    for (int j = 8; j < 16; j++)
-                    {
-                        Choosenletter[count][j] = zero;
-                    }
-                    count++;
-                }
-                count = 0;
-                //sliding animation
-                for (int m = 0; m < 8; m++)
+                for (int i = 0; i < lengthOfMessage; i++)
                 {
                     count = 0;
-                    for (int i = 0; i < 8; i++)
+                    message[i] = changeUpperCase(message[i]);
+                    int letterValue = message[i] - 65;
+                    int spacing = i * 10;
+                    //to set the array of each row of display
+                    //compile letters together
+                    for (int k = 0; k < 64; k += 8)
                     {
-                        printf("%d", i);
-                        for (int k = 0; k < 8; k++)
+                        for (int j = 0; j < 8; j++)
                         {
-                            int abc = k + m;
-                            *(p + count + k) = Choosenletter[i][abc];
-                            printf("%d", *(p + count + k));
+                            Choosenletter[count][j + spacing] = letter[letterValue][j + k];
+                        }
+                        for (int j = 8; j < 10; j++)
+                        {
+                            Choosenletter[count][spacing + j] = zero;
+                        }
+                        count++;
+                    }
+                }
+                int number = 0;
+                //sliding animation
+                for (int m = 0; m < arr_length; m++)
+                {
+                    count = 0;
+                    for (int k = 0; k < 8; k++)
+                    {
+                        for (int l = 0; l < 8; l++)
+                        {
+                            *(p + count + l) = Choosenletter[k][l + m];
                         }
                         count += 8;
-                        printf("\n");
                     }
-                    delay(1000);
+                    number++;
+                    delay(300);
                     memset(p, 0, FILESIZE);
                 }
-                // for (int i = 0; i < NUM_WORDS; i++)
-                // {
-                //     *p = letter[letterValue][i];
-                // }
-                // delay(250);
-
-                // here is the scrolling part
-                // for (int j = 8; j > 3; --j)
-                // {
-                //     light_it_up(p + j, letter, message[i] - 65);
-                // }
             }
         }
+    }
+}
+char changeUpperCase(char letter)
+{
+    //Change lowercase's value to uppercase
+    if (letter >= 'a' && letter <= 'z')
+    {
+        letter -= 32;
+        return letter;
     }
 }
 
