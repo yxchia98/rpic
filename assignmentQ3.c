@@ -136,6 +136,7 @@ int main(void)
             break;
         case 4:
             displayText(p, letter, message, ch);
+            break;
         case 5:
             squareGame(8, 1, p, N, map);
         case 6:
@@ -185,13 +186,13 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
         }
         printf("Enter row:");
         scanf("%d", &row);
+        if(row == 0)
+        break;
         printf("Enter col:");
         scanf("%d", &col);
-        if(row == 0 || col == 0)
-        {
-            choice = 0;
-        }
-        else if(row <= 0 || col <= 0)
+        if(col == 0)
+        break;
+        if(row <= 0 || col <= 0)
         {
             printf("Enter positive values for rows and columns\n");
         }
@@ -423,9 +424,10 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
 {
     char option = 0;
     printf("Display Message\nPress 2. Exit\n");
+    fgetc(stdin);
     while (option != 2)
     {
-        printf("Enter alphabetic message: ");
+        fputs("Enter alphabetic message: ",stdout);
         fgets(message, 100, stdin);
 
         for (int i = 0; message[i] != '\0'; ++i)
