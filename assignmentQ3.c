@@ -171,30 +171,30 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
     choice = 0;
     printf("Matrix customizer\nEnter 0 at anytime to quit and return to main menu\nPress 1 to Continue...\n");
     scanf("%d", &choice);
-    while(choice != 0)
+    while (choice != 0)
     {
         printf("USER MATRIX\n");
         for (i = 0; i < NUM_WORDS; i++)
         {
             *(ptr + i) = user_matrix[i];
         }
-        for(i = 0, k = 0; i < 8; i++)
+        for (i = 0, k = 0; i < 8; i++)
         {
-            for(j = 0; j < 8;j++, k++)
+            for (j = 0; j < 8; j++, k++)
             {
-                user_matrix[k] != 0 ? printf("1 "): printf("0 ");
+                user_matrix[k] != 0 ? printf("1 ") : printf("0 ");
             }
             printf("\n");
         }
         printf("Enter row:");
         scanf("%d", &row);
-        if(row == 0)
-        break;
+        if (row == 0)
+            break;
         printf("Enter col:");
         scanf("%d", &col);
-        if(col == 0)
-        break;
-        if(row <= 0 || col <= 0)
+        if (col == 0)
+            break;
+        if (row <= 0 || col <= 0)
         {
             printf("Enter positive values for rows and columns\n");
         }
@@ -203,7 +203,6 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
             edit = (row - 1) * 8 + col - 1;
             user_matrix[edit] = user_matrix[edit] == 0 ? *N : 0;
         }
-
     }
     memset(map, 0, FILESIZE);
 }
@@ -443,7 +442,7 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
             else
             {
                 int lengthOfMessage = strlen(message) - 1;
-                int arr_length = lengthOfMessage * 10;
+                int arr_length = lengthOfMessage * 8;
                 uint16_t Choosenletter[8][1000] = {};
                 int count = 0;
                 uint16_t zero = 0;
@@ -452,7 +451,7 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
                     count = 0;
                     message[i] = changeUpperCase(message[i]);
                     int letterValue = message[i] - 65;
-                    int spacing = i * 10;
+                    int spacing = i * 8;
                     //to set the array of each row of display
                     //compile letters together
                     for (int k = 0; k < 64; k += 8)
@@ -461,10 +460,8 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
                         {
                             Choosenletter[count][j + spacing] = letter[letterValue][j + k];
                         }
-                        for (int j = 8; j < 10; j++)
-                        {
-                            Choosenletter[count][spacing + j] = zero;
-                        }
+                        // Choosenletter[count][spacing + 1] = zero;
+
                         count++;
                     }
                 }
