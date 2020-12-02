@@ -44,7 +44,6 @@ void colorSet(int choice, uint16_t *n);
 // uint16_t letterA[64], letterB[64], letterC[64], letterD[64], letterE[64], letterF[64], letterG[64], letterH[64], letterI[64], letterJ[64], letterK[64], letterL[64], letterM[64], letterN[64], letterO[64], letterP[64], letterQ[64], letterR[64], letterS[64], letterT[64], letterU[64], letterV[64], letterW[64], letterX[64], letterY[64], letterZ[64], heart[64], singapore[64], smile[64];
 void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *map);
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
-void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue);
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map);
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch);
 int squareGame(int squareLength, int i, uint16_t *ptr, uint16_t N, uint16_t *map);
@@ -127,12 +126,15 @@ int main(void)
     /* clear the led matrix */
     memset(map, 0, FILESIZE);
     //MAIN MENU, TO BE BRANCHED TO SUB MENUS, ETC
-    while (choice != 6)
+    while (choice != 0)
     {
-        printf("%sMAIN MENU%s\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. Test Game\n6. Exit\nEnter Selection:",BOLDBLACK, RESET);
+        printf("%sMAIN MENU%s\n1. Change Color\n2. Edit Matrix\n3. Display Message\n4. Test Game\n0. Exit\nEnter Selection:", BOLDBLACK, RESET);
         scanf("%d", &choice);
         switch (choice)
         {
+        case 0:
+            break;
+
         case 1:
             selectColor(p, &N, letter, map);
             break;
@@ -140,14 +142,10 @@ int main(void)
             editMatrix(p, &N, user_matrix, map);
             break;
         case 3:
-            break;
-        case 4:
             displayText(p, letter, message, ch);
             break;
-        case 5:
+        case 4:
             squareGame(8, 1, p, N, map);
-            break;
-        case 6:
             break;
         }
     }
@@ -236,6 +234,7 @@ void colorSet(int choice, uint16_t *n)
     }
 }
 
+//set color choosen
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64])
 {
     for (int i = 0; i < 26; i++)
@@ -248,162 +247,9 @@ void setColor(uint16_t N, uint16_t (*letter_ptr)[64])
             }
         }
     }
-    // letter[0][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, N, N, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0};
-    // letter[1][64] = {0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, N, N, N, 0, 0};
-    // letter[2][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0};
-    // letter[3][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[4][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[5][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[6][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, N, N, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[7][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[8][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[9][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[10][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[11][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[12][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, N, 0, N, 0, N, 0, N, 0, 0, N, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[13][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, 0, 0, N, 0, 0, 0, N, 0, N, 0, N, 0, 0, 0, N, 0, 0, N, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[14][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[15][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[16][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, N, N, 0, 0, 0, N, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, N};
-    // letter[17][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[18][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[19][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[20][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[21][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[22][64] = {0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, N, 0, N, 0, 0, N, 0, 0, N, 0, 0, N, 0, N, 0, N, 0, 0, 0, N, 0, N, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[23][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, 0, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[24][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, 0, N, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-    // letter[25][64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-    // heart[64] = {
-    //     0, 0, 0, 0, 0, 0, 0, 0,
-    //     0, N, N, 0, 0, N, N, 0,
-    //     N, N, N, N, N, N, N, N,
-    //     N, N, N, N, N, N, N, N,
-    //     0, N, N, N, N, N, N, 0,
-    //     0, 0, N, N, N, N, 0, 0,
-    //     0, 0, 0, N, N, 0, 0, 0,
-    //     0, 0, 0, 0, 0, 0, 0, 0};
-
-    // singapore[64] = {
-    //     0, 0, 0, 0, 0, 0, 0, 0,
-    //     0, N, N, 0, 0, N, N, 0,
-    //     N, 0, 0, 0, N, 0, 0, N,
-    //     N, N, 0, 0, N, 0, 0, 0,
-    //     0, 0, N, 0, N, 0, N, N,
-    //     N, 0, N, 0, N, 0, 0, N,
-    //     0, N, 0, 0, 0, N, N, 0,
-    //     0, 0, 0, 0, 0, 0, 0, 0};
-
-    // smile[64] = {
-    //     0,
-    //     0,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     0,
-    //     0,
-    //     0,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     0,
-    //     Y,
-    //     W,
-    //     BK,
-    //     Y,
-    //     Y,
-    //     W,
-    //     BK,
-    //     Y,
-    //     Y,
-    //     BK,
-    //     W,
-    //     Y,
-    //     Y,
-    //     BK,
-    //     W,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     BK,
-    //     W,
-    //     W,
-    //     BK,
-    //     Y,
-    //     Y,
-    //     0,
-    //     Y,
-    //     Y,
-    //     R,
-    //     R,
-    //     Y,
-    //     Y,
-    //     0,
-    //     0,
-    //     0,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     Y,
-    //     0,
-    //     0,
-    // };
-}
-void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue)
-{
-    /* light it up! */
-    for (int i = 0; i < NUM_WORDS; i++)
-    {
-        *(ptr + i) = letter[letterValue][i];
-    }
-    delay(500);
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     delay(250);
-    //     memset(p, 0, FILESIZE);
-    //     delay(250);
-    //     memset(p, 0, FILESIZE);
-    // }
-    // delay(250);
-
-    // /* light it up! */
-    // for (i = 0; i < NUM_WORDS; i++)
-    // {
-    //     *(p + i) = heart[i];
-    //     //delay(25);
-    // }
-    // delay(500);
-
-    // /* light it up! */
-    // for (i = 0; i < NUM_WORDS; i++)
-    // {
-    //     *(p + i) = singapore[i];
-    //     //delay(25);
-    // }
-    // delay(500);
-
-    // /* light it up! */
-    // for (i = 0; i < NUM_WORDS; i++)
-    // {
-    //     *(p + i) = smile[i];
-    //     //delay(25);
-    // }
-    // delay(5000);
 }
 
+//select color choosen
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map)
 {
     int i, choice = 1;
@@ -427,6 +273,7 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *ma
     memset(map, 0, FILESIZE);
 }
 
+//display message typed in with sliding animation
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
 {
     int option = 1;
@@ -491,9 +338,9 @@ void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char c
         }
     }
 }
+//Change lowercase's value to uppercase
 char changeUpperCase(char letter)
 {
-    //Change lowercase's value to uppercase
     if (letter >= 'a' && letter <= 'z')
     {
         letter -= 32;
