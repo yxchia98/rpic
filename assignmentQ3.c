@@ -33,6 +33,12 @@
 #define Y 0xFFE0
 #define BK 0x0000
 
+#define BOLDBLACK "\033[1m\033[30m" //bold black printing color
+#define BOLDGREEN "\033[1m\033[32m" //bold green printing color
+#define BOLDRED "\033[1m\033[31m"   //bold red printing color
+#define BOLDBLUE "\033[1m\033[34m"  //bold blue printing color
+#define RESET "\033[0m"             //reset printing color
+
 void delay(int);
 void colorSet(int choice, uint16_t *n);
 // uint16_t letterA[64], letterB[64], letterC[64], letterD[64], letterE[64], letterF[64], letterG[64], letterH[64], letterI[64], letterJ[64], letterK[64], letterL[64], letterM[64], letterN[64], letterO[64], letterP[64], letterQ[64], letterR[64], letterS[64], letterT[64], letterU[64], letterV[64], letterW[64], letterX[64], letterY[64], letterZ[64], heart[64], singapore[64], smile[64];
@@ -123,7 +129,7 @@ int main(void)
     //MAIN MENU, TO BE BRANCHED TO SUB MENUS, ETC
     while (choice != 6)
     {
-        printf("MAIN MENU\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. Test Game\n6. Exit\nEnter Selection:");
+        printf("%sMAIN MENU%s\n1. Change Color\n2. Edit Matrix\n3. Change Display Style\n4. Display Message\n5. Test Game\n6. Exit\nEnter Selection:",BOLDBLACK, RESET);
         scanf("%d", &choice);
         switch (choice)
         {
@@ -400,13 +406,13 @@ void light_it_up(uint16_t *ptr, uint16_t letter[26][64], int letterValue)
 
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map)
 {
-    int i, choice = 0;
+    int i, choice = 1;
     for (i = 0; i < NUM_WORDS; i++)
     {
         *(ptr + i) = letter[0][i];
     }
-    printf("COLOR SETTER\n1. Red\n2. Green\n3. Blue\n4. White\n5. Exit\n");
-    while (choice != 5)
+    printf("COLOR SETTER\n 0. Exit\n %s1. Red\n %s2. Green\n %s3. Blue\n %s4. White\n", BOLDRED, BOLDGREEN, BOLDBLUE, RESET);
+    while (choice != 0)
     {
         printf("Select color:");
         scanf("%d", &choice);
