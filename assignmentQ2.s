@@ -1,10 +1,10 @@
 .data
 .balign 4
-input_one_string:.asciz "\nEnter an integer number:\n"
-input_two_string:.asciz "\nEnter the Option 1 or 2:\n"
+input_one_string:.asciz "\nEnter an integer number:"
+input_two_string:.asciz "\nEnter the Option 1 or 2:"
 input_format:.asciz "%d"
-printing_one_string:.asciz "Factorial result of %d: %d"
-printing_two_string:.asciz "Product result of %d: %d"
+printing_one_string:.asciz "Factorial result of %d: %d\n"
+printing_two_string:.asciz "Product result of %d: %d\n"
 integer_number: .int 0
 option_number: .int 0
 .text
