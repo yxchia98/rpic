@@ -423,21 +423,20 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *ma
 
 void displayText(uint16_t *p, uint16_t letter[26][64], char message[100], char ch)
 {
-    int option = 0;
-    printf("Display Message\nPress 2. Exit\n");
+    int option = 1;
+    printf("Display Message\nPress 0. Exit\n");
     fgetc(stdin);
-    while (option != 2)
+    while (option != 0)
     {
         //clear array
         memset(message, 0, 100);
         printf("\nEnter alphabetic message: ");
         fgets(message, 100, stdin);
-        printf("first length of message %d\n", strlen(message));
         if (strlen(message) != 1)
         {
-            if (message[0] == 50)
+            if (message[0] == 48)
             {
-                option = 2;
+                option = 0;
             }
             else
             {
