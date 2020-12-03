@@ -16,9 +16,9 @@ int main()
 {
     int operand1, operand2, result, remainder;
 
-    printf("Enter Dividend:");                      //get dividend
+    printf("Enter Dividend: ");                      //get dividend
     scanf("%d", &operand1);                         
-    printf("Enter Divisor:");                       //get divisor
+    printf("Enter Divisor: ");                       //get divisor
     scanf("%d", &operand2);                              //pointer 
     result = binDiv(operand1, operand2);       //pass values into binDiv()
     printf("Binary division for %d(dividend) and %d(divisor) is: %d\n", operand1, operand2, result);   
