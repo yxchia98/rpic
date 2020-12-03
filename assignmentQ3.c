@@ -198,7 +198,7 @@ int main(void)
     uint16_t *map;
     uint16_t *p;
     uint16_t N = W;
-    uint16_t user_matrix[64] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    uint16_t user_matrix[64] = {};
     uint16_t letter[26][64] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, N, N, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0, 0, N, N, 0},
                                {0, N, N, N, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, N, N, 0, 0, 0, 0, 0, N, 0, 0, N, 0, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, 0, 0, 0, N, N, N, N, N, 0, 0},
                                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, 0, 0, 0, 0, 0, 0, 0, 0, N, N, N, N, 0},
@@ -312,8 +312,38 @@ void delay(int t)
 }
 
 void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *map)
+
 {
     int i, j, k, row, col, edit, choice;
+    char temp[500], value[10], delim[2] = ",";
+    char *token;
+    FILE *save_ptr;
+    save_ptr = fopen("saved.txt","r");
+    if(save_ptr == NULL)   //error checking for file not found
+    {
+	save_ptr = fopen("saved.txt","w");
+        printf("saved file not found, creating a new save\n");
+    }
+    fgets(temp, 300, save_ptr);
+    token = strtok(temp,delim);
+    i = 0;
+    while (token != NULL)
+    {
+        user_matrix[i] = atoi(token);
+        token = strtok(NULL, delim);
+        i++;
+    }
+    if(i != 64)
+    {
+        printf("Corrupted save, creating new save\n");
+        for(j = 0; j < NUM_WORDS; j++)
+        {
+            user_matrix[j] = 0;
+        }
+    }
+    fclose(save_ptr);
+    save_ptr = fopen("saved.txt","w");
+    i = 0;
     k = 0;
     choice = 0;
     printf("Matrix customizer\nEnter 0 at anytime to quit and return to main menu\nPress 1 to Continue...\n");
@@ -333,17 +363,17 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
             }
             printf("\n");
         }
-        printf("Enter row:");
+        printf("Enter row (1 - 8):");
         scanf("%d", &row);
         if (row == 0)
             break;
-        printf("Enter col:");
+        printf("Enter col (1 - 8):");
         scanf("%d", &col);
         if (col == 0)
             break;
-        if (row <= 0 || col <= 0)
+        if (row <= 0 || col <= 0 || row > 8 || col > 8)
         {
-            printf("Enter positive values for rows and columns\n");
+            printf("Enter positive values(1 - 8) for rows and columns\n");
         }
         else
         {
@@ -351,6 +381,16 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
             user_matrix[edit] = user_matrix[edit] == 0 ? *N : 0;
         }
     }
+    for(i = 0; i < NUM_WORDS; i++)
+    {
+        sprintf(value, "%u", user_matrix[i]);
+        fputs(value, save_ptr);
+        if(i != NUM_WORDS-1)
+        {
+            fputs(delim, save_ptr);
+        }
+    }
+    fclose(save_ptr);
     memset(map, 0, FILESIZE);
 }
 
