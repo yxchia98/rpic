@@ -583,7 +583,6 @@ void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char 
                 for (int i = 0; i < lengthOfMessage; i++)
                 {
                     count = 0;
-                    //message[i] = changeUpperCase(message[i]);
                     int letterValue = message[i] ;//- 65;
                     int spacing = i * 8;
                     //to set the array of each row of display
@@ -594,8 +593,6 @@ void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char 
                         {
                             Choosenletter[count][j + spacing] = letter[letterValue][j + k];
                         }
-                        // Choosenletter[count][spacing + 1] = zero;
-
                         count++;
                     }
                 }
