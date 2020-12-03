@@ -56,7 +56,6 @@ void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map);
 void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char ch);
 int gameSnake(int fbfd);
-//char changeUpperCase(char letter);
 void render();
 int check_collision(int appleCheck);
 void game_logic(void);
@@ -617,15 +616,6 @@ void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char 
         }
     }
 }
-//Change lowercase's value to uppercase
-// char changeUpperCase(char letter)
-// {
-//     if (letter >= 'a' && letter <= 'z')
-//     {
-//         letter -= 32;
-//         return letter;
-//     }
-// }
 
 int gameSnake(int fbfd)
 {
