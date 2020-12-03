@@ -47,6 +47,7 @@
 #define BOLDGREEN "\033[1m\033[32m" //bold green printing color
 #define BOLDRED "\033[1m\033[31m"   //bold red printing color
 #define BOLDBLUE "\033[1m\033[34m"  //bold blue printing color
+#define BOLDYELLOW "\033[1m\033[33m"  //bold blue printing color
 #define RESET "\033[0m"             //reset printing color
 
 void delay(int);
@@ -509,6 +510,10 @@ void colorSet(int choice, uint16_t *n)
     }
     else if (choice == 4)
     {
+        *n = Y;
+    }
+    else if (choice == 5)
+    {
         *n = W;
     }
     else
@@ -539,7 +544,7 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *ma
     {
         *(ptr + i) = letter[0][i];
     }
-    printf("COLOR SETTER\n 0. Exit\n %s1. Red\n %s2. Green\n %s3. Blue\n %s4. White\n", BOLDRED, BOLDGREEN, BOLDBLUE, RESET);
+    printf("COLOR SETTER\n 0. Exit\n %s1. Red\n %s2. Green\n %s3. Blue\n %s4. Yellow\n %s5. White\n", BOLDRED, BOLDGREEN, BOLDBLUE, BOLDYELLOW, RESET);
     while (choice != 0)
     {
         printf("Select color:");
