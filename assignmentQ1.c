@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-int binSub(int operand1, int operand2);
 int binAdd(int operand1, int operand2);
 int calCarry(int operand1, int operand2);
 int binAdd(int operand1, int operand2);
