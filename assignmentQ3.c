@@ -378,16 +378,16 @@ int main(void)
             break;
 
         case 1:
-            selectColor(p, &N, letter, map);
+            selectColor(p, &N, letter, map);    //calls the change color function
             break;
         case 2:
-            editMatrix(p, &N, user_matrix, map);
+            editMatrix(p, &N, user_matrix, map);    //calls the edit matrix function
             break;
         case 3:
-            displayText(p, letter, message, ch);
+            displayText(p, letter, message, ch);    //calls the display message function
             break;
         case 4:
-            gameSnake(fbfd, N);
+            gameSnake(fbfd, N);                    //calls the test game function
             break;
         }
     }
@@ -414,34 +414,34 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
 
 {
     int i, j, k, row, col, edit, choice;
-    char temp[500], value[10], delim[2] = ",";
+    char temp[500], value[10], delim[2] = ",";  //delimiters, temporary string storages
     char *token;
     FILE *save_ptr;
     save_ptr = fopen("saved.txt", "r");
-    if (save_ptr == NULL) //error checking for file not found
+    if (save_ptr == NULL)               //error checking for file not found
     {
-        save_ptr = fopen("saved.txt", "w");
+        save_ptr = fopen("saved.txt", "w");         //creates a new save file if file not found
         printf("saved file not found, creating a new save\n");
     }
-    fgets(temp, 300, save_ptr);
-    token = strtok(temp, delim);
+    fgets(temp, 300, save_ptr);                 //get the first line of the save file
+    token = strtok(temp, delim);                //split the string file into user_matrix[] array values
     i = 0;
     while (token != NULL)
     {
-        user_matrix[i] = atoi(token);
+        user_matrix[i] = atoi(token);           //split the line of string delimited by ',', and assign each element into the nodes of the LED Matrix
         token = strtok(NULL, delim);
         i++;
     }
-    if (i != 64)
+    if (i != 64)                                //check if the data in the save file fully maps to the 8x8 LED Matrix
     {
         printf("Corrupted save, creating new save\n");
         for (j = 0; j < NUM_WORDS; j++)
         {
-            user_matrix[j] = 0;
+            user_matrix[j] = 0;                 //initialize a new matrix if the save file is corrupted
         }
     }
-    fclose(save_ptr);
-    save_ptr = fopen("saved.txt", "w");
+    fclose(save_ptr);                           //close the file pointer
+    save_ptr = fopen("saved.txt", "w");         //open a new file pointer for writing
     i = 0;
     k = 0;
     choice = 0;
@@ -450,7 +450,7 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
     while (choice != 0)
     {
         printf("USER MATRIX\n");
-        for (i = 0; i < NUM_WORDS; i++)
+        for (i = 0; i < NUM_WORDS; i++)         //displays the current matrix setup
         {
             *(ptr + i) = user_matrix[i];
         }
@@ -458,29 +458,29 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
         {
             for (j = 0; j < 8; j++, k++)
             {
-                user_matrix[k] != 0 ? printf("1 ") : printf("0 ");
+                user_matrix[k] != 0 ? printf("1 ") : printf("0 ");  //prints out a 8x8 layout of the current configuration
             }
             printf("\n");
         }
-        printf("Enter row (1 - 8):");
+        printf("Enter row (1 - 8):");           //prompts user for row input
         scanf("%d", &row);
         if (row == 0)
             break;
-        printf("Enter col (1 - 8):");
+        printf("Enter col (1 - 8):");           //prompts user for column input
         scanf("%d", &col);
         if (col == 0)
             break;
         if (row <= 0 || col <= 0 || row > 8 || col > 8)
         {
-            printf("Enter positive values(1 - 8) for rows and columns\n");
+            printf("Enter positive values(1 - 8) for rows and columns\n");  //prompt user for input if out of range values are entered
         }
         else
         {
             edit = (row - 1) * 8 + col - 1;
-            user_matrix[edit] = user_matrix[edit] == 0 ? *N : 0;
+            user_matrix[edit] = user_matrix[edit] == 0 ? *N : 0;        //set the respective node with the current color
         }
     }
-    for (i = 0; i < NUM_WORDS; i++)
+    for (i = 0; i < NUM_WORDS; i++)         //write the matrix into the save file
     {
         sprintf(value, "%u", user_matrix[i]);
         fputs(value, save_ptr);
@@ -490,10 +490,10 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
         }
     }
     fclose(save_ptr);
-    memset(map, 0, FILESIZE);
+    memset(map, 0, FILESIZE);           //reset the framebuffer before return to main menu
 }
 
-void colorSet(int choice, uint16_t *n)
+void colorSet(int choice, uint16_t *n)  //function to set the current color of the LED.
 {
     if (choice == 1)
     {
@@ -521,7 +521,7 @@ void colorSet(int choice, uint16_t *n)
 }
 
 //set color choosen
-void setColor(uint16_t N, uint16_t (*letter_ptr)[64])
+void setColor(uint16_t N, uint16_t (*letter_ptr)[64])   //apply the current color to change all ascii characters
 {
     for (int i = 0; i < 128; i++)
     {
