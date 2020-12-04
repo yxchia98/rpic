@@ -579,15 +579,19 @@ void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char 
             }
             else
             {
+                //length message input
                 int lengthOfMessage = strlen(message) - 1;
+                //length of array that will be used
                 int arr_length = lengthOfMessage * 8;
                 uint16_t Choosenletter[8][1000] = {};
                 int count = 0;
                 uint16_t zero = 0;
+                //loop each char in message input
                 for (int i = 0; i < lengthOfMessage; i++)
                 {
                     count = 0;
-                    int letterValue = message[i] ;//- 65;
+                    //get letter value to access letter[], where the pixels of each letter is stored
+                    int letterValue = message[i] ;
                     int spacing = i * 8;
                     //to set the array of each row of display
                     //compile letters together
@@ -605,6 +609,7 @@ void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char 
                 for (int m = 0; m < arr_length; m++)
                 {
                     count = 0;
+                    //each loop moves "right" by 1, causes the sliding animation
                     for (int k = 0; k < 8; k++)
                     {
                         for (int l = 0; l < 8; l++)
