@@ -56,8 +56,8 @@ void editMatrix(uint16_t *ptr, uint16_t *N, uint16_t user_matrix[64], uint16_t *
 void setColor(uint16_t N, uint16_t (*letter_ptr)[64]);
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map);
 void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char ch);
-int gameSnake(int fbfd);
-void render();
+int gameSnake(int fbfd, uint16_t N);
+void render(uint16_t N);
 int check_collision(int appleCheck);
 void game_logic(void);
 void reset(void);
@@ -387,7 +387,7 @@ int main(void)
             displayText(p, letter, message, ch);
             break;
         case 4:
-            gameSnake(fbfd);
+            gameSnake(fbfd, N);
             break;
         }
     }
@@ -622,7 +622,7 @@ void displayText(uint16_t *p, uint16_t letter[128][64], char message[100], char 
     }
 }
 
-int gameSnake(int fbfd)
+int gameSnake(int fbfd, uint16_t N)
 {
 
     memset(fb, 0, 128);
@@ -638,7 +638,7 @@ int gameSnake(int fbfd)
         {
             reset();
         }
-        render();
+        render(N);
         usleep(300000);
     }
     memset(fb, 0, 128);
@@ -646,14 +646,14 @@ int gameSnake(int fbfd)
     munmap(fb, 128);
 }
 
-void render()
+void render(uint16_t N)
 {
     struct segment_t *seg_i;
     memset(fb, 0, 128);
     fb->pixel[apple.x][apple.y] = 0xF800;
     for (seg_i = snake.tail; seg_i->next; seg_i = seg_i->next)
     {
-        fb->pixel[seg_i->x][seg_i->y] = 0x7E0;
+        fb->pixel[seg_i->x][seg_i->y] = N;
     }
     fb->pixel[seg_i->x][seg_i->y] = 0xFFFF;
 }
