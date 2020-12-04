@@ -539,10 +539,6 @@ void setColor(uint16_t N, uint16_t (*letter_ptr)[64])   //apply the current colo
 void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *map)
 {
     int i, choice = 1;
-    for (i = 0; i < NUM_WORDS; i++)
-    {
-        *(ptr + i) = letter[0][i];
-    }
     printf("COLOR SETTER\n 0. Exit\n %s1. Red\n %s2. Green\n %s3. Blue\n %s4. Yellow\n %s5. White\n", BOLDRED, BOLDGREEN, BOLDBLUE, BOLDYELLOW, RESET);
     while (choice != 0)
     {
@@ -550,10 +546,6 @@ void selectColor(uint16_t *ptr, uint16_t *N, uint16_t letter[][64], uint16_t *ma
         scanf("%d", &choice);
         colorSet(choice, N);
         setColor(*N, letter);
-        for (i = 0; i < NUM_WORDS; i++)
-        {
-            *(ptr + i) = letter[0][i];
-        }
     }
     printf("Color changed to:0x%04X\n", *N);
     memset(map, 0, FILESIZE);
@@ -631,7 +623,6 @@ int gameSnake(int fbfd, uint16_t N)
 {
 
     memset(fb, 0, 128);
-
     snake.tail = &snake.head;
     reset();
     while (running)
